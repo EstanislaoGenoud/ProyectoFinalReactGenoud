@@ -6,10 +6,8 @@ export const CartProvider = ({ children }) => {
     const [cartItems, setCartItems] = useState([]);
     const [totalItems, setTotalItems] = useState(0);
     const [totalPrice, setTotalPrice] = useState(0);
-
     const addToCart = (item) =>{
         const existingItemIndex = cartItems.findIndex((cartItem) => cartItem.id === item.id);
-
         if(existingItemIndex !== -1){
             const updatedCartItems = [...cartItems];
             updatedCartItems[existingItemIndex].quantity++;
@@ -17,7 +15,6 @@ export const CartProvider = ({ children }) => {
         }else {
             setCartItems([...cartItems, { ...item, quantity: 1 }])
         }
-
         setTotalItems(totalItems + 1);
         setTotalPrice(totalPrice + item.price);
     };
@@ -33,7 +30,6 @@ export const CartProvider = ({ children }) => {
         setTotalItems(0);
         setTotalPrice(0);
     };
-
     return (
         <CartContext.Provider
             value={{
@@ -43,8 +39,7 @@ export const CartProvider = ({ children }) => {
                 addToCart: addToCart,
                 clearCart: clearCart,
                 removeItem: removeItem
-            }}
-        >
+            }}>
             {children}
         </CartContext.Provider>
     )

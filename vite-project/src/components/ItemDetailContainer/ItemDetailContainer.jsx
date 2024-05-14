@@ -6,9 +6,7 @@ import ItemDetail from "./ItemDetail";
 
 function ItemDetailContainer() {
     const [product, setProduct] = useState({});
-
     const { id } = useParams();
-
     useEffect(() =>{
         const db = getFirestore(app);
         const productRef = doc(db, "products", id);
@@ -23,7 +21,6 @@ function ItemDetailContainer() {
             console.error("Error al obtener el producto:", error);
         });
     }, [id]);
-
     return (
         <>
             <ItemDetail product={product} />

@@ -10,7 +10,6 @@ function Header(){
     const categories = useCategories();
     const [selectCategory, setSelectCategory] = useState(null);
     const [products, setProducts] = useState([]);
-
     useEffect(() => {
         if (selectCategory) {
             const fetchProducts = async () =>{
@@ -41,5 +40,4 @@ function Header(){
         </header>
     )
 }
-
 export default Header

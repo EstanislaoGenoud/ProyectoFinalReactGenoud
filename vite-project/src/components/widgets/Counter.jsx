@@ -4,20 +4,15 @@ import { getFirestore, doc, getDoc,getDocs, collection} from "firebase/firestore
 import { app } from "../../firebase";
 import {  toast } from 'react-toastify';
 
-
 export default function Counter(props) {
     const { addToCart } = useContext(CartContext);
-
     const [counterValue, setCounterValue] = useState(0);
     const [confirmed, setConfirmed] = useState(false);
     const [product, setProduct] = useState(null);
-
-    
     useEffect(() => {
         const fetchProduct = async () => {
             const db = getFirestore(app);
             const productsCollection = collection(db, "products");
-    
             try {
                 if (props.product && props.product.id) {
                     const productDoc = doc(productsCollection, props.product.id);
@@ -42,13 +37,11 @@ export default function Counter(props) {
         };
         fetchProduct();
     }, []);
-
     const handleConfirm = () => {
         if (counterValue > 0) {
             setConfirmed(true); 
         }
     };
-
     const handleAddToCart = () => {
         if (counterValue > 0) {
             addToCart({ ...props.product, quantity: counterValue });
@@ -66,13 +59,11 @@ export default function Counter(props) {
         }
     };
     const increment = () => setCounterValue(prevValue => prevValue + 1);
-
     const decrement = () => {
         if (counterValue > 0) {
             setCounterValue(prevValue => prevValue - 1);
         }
     };
-
     return (
         <div className="mt-2">
             <div className="flex flex-row h-10 w-full rounded-lg relative -bg-transparent mt-1">

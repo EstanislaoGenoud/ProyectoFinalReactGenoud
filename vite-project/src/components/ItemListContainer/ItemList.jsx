@@ -14,5 +14,4 @@ function ItemList({ product }) {
         </div>
     )
 }
-
 export default ItemList

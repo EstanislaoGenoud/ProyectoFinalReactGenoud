@@ -12,18 +12,14 @@ import { toast } from "react-toastify";
 function Cart() {
     const { cartItems, removeItem, totalItems, totalPrice, clearCart } = useCart();
     const formattedTotalPrice = totalPrice.toLocaleString();
-
     const handleRemoveFromCart = (itemId) => {
         removeItem(itemId);
     };
-
     const [nombre, setNombre] = useState("");
     const [apellido, setApellido] = useState("");
     const [email, setEmail] = useState("");
     const [metodoPago, setMetodoPago] = useState("");
     const [metodoEnvio, setMetodoEnvio] = useState("");
-    
-
     const handleSubmit = (e) => {
         e.preventDefault();
         toast.loading("Procesando compra...");
@@ -58,7 +54,6 @@ function Cart() {
             fechaDeCompra: serverTimestamp()
             
         };
-
         try {
             const docRef = await addDoc(salesCollection, sale);
         } catch (error) {
@@ -168,7 +163,6 @@ function Cart() {
                                     <input type="text" className="w-full px-3 py-2 border border-gray-200 rounded-md focus:outline-none focus:border-indigo-500 transition-colors mb-3" value={apellido} onChange={(e) => setApellido(e.target.value)} placeholder="Apellido" />
                                     <label htmlFor="" className="text-gray-600 font-semibold text-sm mb-2 ml-1">Email</label>
                                     <input type="text" className="w-full px-3 py-2 border border-gray-200 rounded-md focus:outline-none focus:border-indigo-500 transition-colors mb-3" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" />
-
                                 </div>
                                 <div className="w-full p-3">
                                     <div className="mb-3">

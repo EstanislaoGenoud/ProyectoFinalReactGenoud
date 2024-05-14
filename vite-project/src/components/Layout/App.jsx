@@ -8,7 +8,6 @@ import 'react-toastify/dist/ReactToastify.css';
 import '../../App.css'
 
 function App() {
-  
   return (
     <BrowserRouter>
       <CartProvider>
@@ -20,5 +19,4 @@ function App() {
     </BrowserRouter>
   )
 }
-
 export default App

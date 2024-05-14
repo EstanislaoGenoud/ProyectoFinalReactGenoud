@@ -14,9 +14,6 @@ function NavBar({ categories, onSelectCategory }) {
     const cartRef = useRef(null);
     const { cartItems, totalItems: cartTotalItems } = useCart() || {};
 
-
-
-
     useEffect(() => {
         if (cartItems) {
             setTotalItems(cartTotalItems);
@@ -46,7 +43,6 @@ function NavBar({ categories, onSelectCategory }) {
             document.removeEventListener("mousedown", handleClickOutside);
         };
     }, []);
-
     return (
         <header>
             <nav className="relative flex justify-between items-center gap-4">
@@ -81,16 +77,13 @@ function NavBar({ categories, onSelectCategory }) {
                                 <Link to="/contact" className="text-black text-lg font-bold" onClick={closeMenu}>Contacto</Link>
                             </div>
                         </div>
-                        
                     )}
                 </div>
                 <div className="flex items-center gap-4">
                     <CartWidget totalItems={totalItems} />
                 </div>
             </nav>
-            
         </header>
     )
 }
-
 export default NavBar;

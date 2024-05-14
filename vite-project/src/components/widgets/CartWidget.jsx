@@ -16,5 +16,4 @@ function CartWidget({ counterValue }) {
     </Link>
   );
 }
-
 export default CartWidget;

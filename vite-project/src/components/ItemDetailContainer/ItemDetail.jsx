@@ -29,5 +29,4 @@ function ItemDetail({ product }) {
         </>
     )
 }
-
 export default ItemDetail

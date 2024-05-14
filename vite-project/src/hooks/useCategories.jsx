@@ -4,7 +4,6 @@ import { app } from "../firebase";
 
 function useCategories(){
     const [categories, setCategories] = useState([])
-
     useEffect(() => {
         const fetchCategories = async () => {
             const db = getFirestore(app);
@@ -13,11 +12,8 @@ function useCategories(){
             const categoriesData = snapshot.docs.map(doc => ({...doc.data(), id: doc.id}));
             setCategories(categoriesData);
         }
-
         fetchCategories();
     }, [])
-
     return categories
 }
-
 export default useCategories
