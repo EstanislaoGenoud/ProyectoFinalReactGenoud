@@ -21,6 +21,13 @@ export const CartProvider = ({ children }) => {
         setTotalItems(totalItems + 1);
         setTotalPrice(totalPrice + item.price);
     };
+    const removeItem = (itemId) =>{
+        const updatedCartItems = cartItems.filter(item => item.id !== itemId);
+        const newTotalPrice = updatedCartItems.reduce((total, item) => total + item.price * item.quantity, 0);
+        setCartItems(updatedCartItems);
+        setTotalItems(totalItems - 1);
+        setTotalPrice(newTotalPrice);
+    };
     const clearCart = () => {
         setCartItems([]);
         setTotalItems(0);
@@ -34,7 +41,8 @@ export const CartProvider = ({ children }) => {
                 totalItems: totalItems,
                 totalPrice: totalPrice,
                 addToCart: addToCart,
-                clearCart: clearCart
+                clearCart: clearCart,
+                removeItem: removeItem
             }}
         >
             {children}

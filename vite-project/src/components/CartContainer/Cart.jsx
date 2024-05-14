@@ -1,10 +1,71 @@
+import { getFirestore, collection, addDoc, serverTimestamp} from "firebase/firestore";
+import { app } from "../../firebase";
 import { ArrowLeft } from "lucide-react";
 import useCart from "../../hooks/useCart";
+import { useState } from "react";
 import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
+
+
+    
 
 function Cart() {
-    const { cartItems, totalItems, totalPrice } = useCart();
+    const { cartItems, removeItem, totalItems, totalPrice, clearCart } = useCart();
     const formattedTotalPrice = totalPrice.toLocaleString();
+
+    const handleRemoveFromCart = (itemId) => {
+        removeItem(itemId);
+    };
+
+    const [nombre, setNombre] = useState("");
+    const [apellido, setApellido] = useState("");
+    const [email, setEmail] = useState("");
+    const [metodoPago, setMetodoPago] = useState("");
+    const [metodoEnvio, setMetodoEnvio] = useState("");
+    
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        toast.loading("Procesando compra...");
+        createSale({
+            items: cartItems,
+            usuario: { nombre, apellido, mail: email },
+            total: totalPrice
+        })
+        .then(() => {
+            toast.dismiss();
+            clearCart()
+            toast.success("¡Gracias por su compra!");
+            
+            setNombre("");
+            setApellido("");
+            setEmail("");
+            setMetodoPago("");
+            setMetodoEnvio("");
+        })
+        .catch((error) => {
+            console.error("Error al procesar la compra:", error);
+            toast.error("¡Hubo un error al procesar la compra!");
+        });
+    };
+    const createSale = async (saleDetails) => {
+        const db = getFirestore(app);
+        const salesCollection = collection(db, "sales");
+        const sale = {
+            ...saleDetails,
+            metodoPago: metodoPago,
+            metodoEnvio: metodoEnvio,
+            fechaDeCompra: serverTimestamp()
+            
+        };
+
+        try {
+            const docRef = await addDoc(salesCollection, sale);
+        } catch (error) {
+            console.error("Error al crear el documento de venta:", error);
+            throw error;
+        }
+    };
     return (
         <div className="min-w-screen min-h-screen bg-gray-50 py-5">
             <div className="px-5">
@@ -46,6 +107,25 @@ function Cart() {
                                             <br />
                                             <span className="font-semibold text-gray-600 text-xl">${(item.price * item.quantity).toLocaleString()}</span>
                                         </div>
+                                        <button
+                        className="ml-4 text-red-500 hover:text-red-700 focus:outline-none"
+                        onClick={() => handleRemoveFromCart(item.id)}
+                    >
+                        <svg
+                            className="w-5 h-5"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                            xmlns="http://www.w3.org/2000/svg"
+                        >
+                            <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth="2"
+                                d="M6 18L18 6M6 6l12 12"
+                            />
+                        </svg>
+                    </button>
                                     </div>
                                 </div>
                             </div>
@@ -79,25 +159,34 @@ function Cart() {
                                 </div>
                             </div>
                             <div className="">
-                        <div className="w-full mx-auto rounded-lg bg-white border border-gray-200 text-gray-800 font-light mb-6">
+                        <form onSubmit={handleSubmit} className="w-full mx-auto rounded-lg bg-white border border-gray-200 text-gray-800 font-light mb-6">
                             <div className="w-full p-3 border-b border-gray-200">
+                                <div className="mb-3 gap-4" >
+                                    <label htmlFor="" className="text-gray-600 font-semibold text-sm mb-2 ml-1" >Nombre</label>
+                                    <input type="text" className="w-full px-3 py-2 border border-gray-200 rounded-md focus:outline-none focus:border-indigo-500 transition-colors mb-3" value={nombre} onChange={(e) => setNombre(e.target.value)} placeholder="Nombre" />
+                                    <label htmlFor="" className="text-gray-600 font-semibold text-sm mb-2 ml-1">Apellido</label>
+                                    <input type="text" className="w-full px-3 py-2 border border-gray-200 rounded-md focus:outline-none focus:border-indigo-500 transition-colors mb-3" value={apellido} onChange={(e) => setApellido(e.target.value)} placeholder="Apellido" />
+                                    <label htmlFor="" className="text-gray-600 font-semibold text-sm mb-2 ml-1">Email</label>
+                                    <input type="text" className="w-full px-3 py-2 border border-gray-200 rounded-md focus:outline-none focus:border-indigo-500 transition-colors mb-3" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" />
+
+                                </div>
                                 <div className="w-full p-3">
                                     <div className="mb-3">
                                         <label htmlFor="" className="text-gray-600 font-semibold text-sm mb-2 ml-1">Metodo de pago</label>
-                                        <select className="w-full px-3 py-2 border border-gray-200 rounded-md focus:outline-none focus:border-indigo-500 transition-colors">
+                                        <select value={metodoPago} onChange={(e) => setMetodoPago(e.target.value)} className="w-full px-3 py-2 border border-gray-200 rounded-md focus:outline-none focus:border-indigo-500 transition-colors">
                                             <option value="">Seleccionar</option>
-                                            <option value="1">Tarjeta de Credito</option>
-                                            <option value="2">Tarjeta de Debito</option>
-                                            <option value="3">Efectivo</option>
+                                            <option value="tarjeta de credito">Tarjeta de Credito</option>
+                                            <option value="tarjeta de debito">Tarjeta de Debito</option>
+                                            <option value="efectivo">Efectivo</option>
                                         </select>
                                 </div>
                                 <div className="mb-3">
                                     <label htmlFor="" className="text-gray-600 font-semibold text-sm mb-2 ml-1">Metodo de envio</label>
-                                    <select className="w-full px-3 py-2 border border-gray-200 rounded-md focus:outline-none focus:border-indigo-500 transition-colors">
+                                    <select value={metodoEnvio} onChange={(e) => setMetodoEnvio(e.target.value)} className="w-full px-3 py-2 border border-gray-200 rounded-md focus:outline-none focus:border-indigo-500 transition-colors">
                                         <option value="">Seleccionar</option>
-                                        <option value="1">Retiro en sucursal</option>
-                                        <option value="2">Envio normal</option>
-                                        <option value="3">Envio Express</option>
+                                        <option value="retiro en sucursal">Retiro en sucursal</option>
+                                        <option value="envio normal">Envio normal</option>
+                                        <option value="envio express">Envio Express</option>
                                     </select>
                                 </div>
                             </div>
@@ -105,7 +194,7 @@ function Cart() {
                             <div className="w-full p-3">
                                 <button className="block w-full max-w-xs mx-auto bg-indigo-500 hover:bg-indigo-700 focus:bg-indigo-700 text-white rounded-lg px-3 py-3 font-semibold">Confirmar</button>
                             </div>
-                        </div>
+                        </form>
                             </div>
                         </div>
                     </div>

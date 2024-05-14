@@ -22,7 +22,6 @@ function NavBar({ categories, onSelectCategory }) {
             setTotalItems(cartTotalItems);
         }
     }, [cartItems, cartTotalItems]);
-    console.log(cartItems);
     const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
     const toggleDropdown = () => setIsDropdownOpen(!isDropdownOpen);
     const toggleCart = () => setIsCartOpen(!isCartOpen);
@@ -75,22 +74,21 @@ function NavBar({ categories, onSelectCategory }) {
                 <div className="relative">
                     <MenuIcon width={30} height={30} className="md:hidden text-white" onClick={toggleMenu} />
                     {isMenuOpen && (
-                        <div className="absolute top-full left-0 z-10 bg-white p-4 shadow-md">
-                            <div className="flex flex-col gap-4">
+                        <div className="fixed top-0 left-0 w-full h-full   bg-black bg-opacity-50 z-10" onClick={closeMenu}>
+                            <div className={` md:-left-full fixed bg-white top-0 flex flex-col gap-4 w-1/3 transition-all duration-400 h-full ${isMenuOpen ? 'left-0' : '-left-full'}`}>
                                 <Link to="/" className="text-black text-lg font-bold" onClick={closeMenu}>Inicio</Link>
                                 <Link to="/category/all" className="text-black text-lg font-bold" onClick={closeMenu}>Catálogo</Link>
                                 <Link to="/contact" className="text-black text-lg font-bold" onClick={closeMenu}>Contacto</Link>
                             </div>
                         </div>
+                        
                     )}
                 </div>
                 <div className="flex items-center gap-4">
                     <CartWidget totalItems={totalItems} />
                 </div>
             </nav>
-            <nav className={"fixed "}>
-
-            </nav>
+            
         </header>
     )
 }

@@ -1,6 +1,0 @@
-solucionar el span del cartwidget. 🎯
-hacer el checkout del cart y enviar a la base de datos creando la collection sell.
-
-
-console.log(productDoc);
-                    productDoc.id = doc.id

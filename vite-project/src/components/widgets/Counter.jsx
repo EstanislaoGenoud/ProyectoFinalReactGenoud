@@ -1,9 +1,9 @@
 import { useContext, useState, useEffect } from "react";
 import { CartContext } from "../../CartContext";
-import { getFirestore, doc, getDoc, collection} from "firebase/firestore";
+import { getFirestore, doc, getDoc,getDocs, collection} from "firebase/firestore";
 import { app } from "../../firebase";
 import {  toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+
 
 export default function Counter(props) {
     const { addToCart } = useContext(CartContext);
@@ -37,7 +37,7 @@ export default function Counter(props) {
                     }
                 }
             } catch (error) {
-                // console.log("Error al obtener el producto", error);
+                console.log("Error al obtener el producto", error);
             }
         };
         fetchProduct();
