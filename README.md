@@ -21,3 +21,4 @@ Este proyecto fue realizado como parte de un curso de React. Se trata de un E-co
 - Lucide (v0.378.0)
 ### Uso de la aplicación:
  Para utilizar la aplicación, simplemente navega a través de las distintas secciones utilizando la barra de navegación. Puedes explorar los productos disponibles, ver sus detalles y agregarlos al carrito de compras. Una vez que estés listo para realizar la compra, completa el formulario de compra en el carrito.
+![record_000005](https://github.com/EstanislaoGenoud/ProyectoFinalReactGenoud/assets/150087767/1a7626b3-ebfb-456e-bab6-0b6c4218afac)
