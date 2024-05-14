@@ -88,6 +88,9 @@ function NavBar({ categories, onSelectCategory }) {
                     <CartWidget totalItems={totalItems} />
                 </div>
             </nav>
+            <nav className={"fixed "}>
+
+            </nav>
         </header>
     )
 }

@@ -2,7 +2,7 @@ import { useContext, useState, useEffect } from "react";
 import { CartContext } from "../../CartContext";
 import { getFirestore, doc, getDoc, collection} from "firebase/firestore";
 import { app } from "../../firebase";
-import { ToastContainer, toast } from 'react-toastify';
+import {  toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 export default function Counter(props) {
@@ -18,26 +18,30 @@ export default function Counter(props) {
             const db = getFirestore(app);
             const productsCollection = collection(db, "products");
     
-            if (props.product && props.product.id) {
-                try {
+            try {
+                if (props.product && props.product.id) {
                     const productDoc = doc(productsCollection, props.product.id);
                     const productSnapshot = await getDoc(productDoc);
-                    
                     if (productSnapshot.exists()) {
                         setProduct(prevProduct => productSnapshot.data());
-
                     } else {
                         console.log("El producto no existe");
                     }
-                } catch (error) {
-                    console.log("Error al obtener el producto", error);
+                } else {
+                    const querySnapshot = await getDocs(productsCollection);
+                    if (!querySnapshot.empty) {
+                        const firstDoc = querySnapshot.docs[0];
+                        setProduct(prevProduct => ({ id: firstDoc.id, ...firstDoc.data() }));
+                    } else {
+                        console.log("No hay productos en la colección");
+                    }
                 }
-            } else {
-                console.log("El ID del producto está vacío o indefinido");
+            } catch (error) {
+                // console.log("Error al obtener el producto", error);
             }
         };
-        fetchProduct(() => setProduct(prevProduct => productSnapshot.data()));
-    }, [props.product])
+        fetchProduct();
+    }, []);
 
     const handleConfirm = () => {
         if (counterValue > 0) {
